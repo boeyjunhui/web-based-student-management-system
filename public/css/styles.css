@@ -1,0 +1,52 @@
+table {
+    white-space: nowrap;
+}
+
+.header {
+    background-color:#212529;
+}
+
+.footer {
+    background-color: #212529;
+}
+
+.card-top {
+    background-color: #212529;
+    color: white;
+}
+
+.card-bottom {
+    background-color: #f8f8f8;
+}
+
+.validation-message {
+    color: #ee4540;
+}
+
+.primary-btn {
+    background-color: #388bff;
+    border-color: #388bff;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.secondary-btn {
+    background-color: #3f474f;
+    border-color: #3f474f;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.danger-btn {
+    background-color: #ee4540;
+    border-color: #ee4540;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.success-btn {
+    background-color: #00c155;
+    border-color: #00c155;
+    color: #fff;
+    border-radius: 8px;
+}
