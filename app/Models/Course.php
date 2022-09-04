@@ -10,6 +10,7 @@ class Course extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    public $incrementing = false;
 
     // generate course list
     public static function getCourseList() {

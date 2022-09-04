@@ -10,7 +10,8 @@ class Subject extends Model
 {
     use HasFactory;
     public $timestamps = false;
-
+    public $incrementing = false;
+     
     // generate subject list
     public static function getSubjectList() {
         $subjectList = DB::table('courses')

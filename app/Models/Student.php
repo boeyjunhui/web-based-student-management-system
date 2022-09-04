@@ -10,6 +10,7 @@ class Student extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    public $incrementing = false;
 
     // generate student list
     public static function getStudentList() {

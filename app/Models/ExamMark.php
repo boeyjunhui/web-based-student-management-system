@@ -10,6 +10,7 @@ class ExamMark extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    public $incrementing = false;
 
     // generate student exam mark report
     public static function getStudentExamMarkReport() {
