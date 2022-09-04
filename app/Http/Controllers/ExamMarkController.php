@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\ExamMark;
 use App\Exports\StudentExamMarkReportExport;
@@ -12,23 +13,25 @@ use Excel;
 class ExamMarkController extends Controller
 {
     // get student, course & subject data
-    public function getData($id) {
+    public function getData($id)
+    {
         $student = DB::table('courses')
-        ->join('students', 'courses.id', '=', 'students.courseID')
-        ->where('students.id', '=', $id)
-        ->get();
+            ->join('students', 'courses.id', '=', 'students.courseID')
+            ->where('students.id', '=', $id)
+            ->get();
 
         $subject = DB::table('courses')
-        ->join('students', 'courses.id', '=', 'students.courseID')
-        ->join('subjects', 'courses.id', '=', 'subjects.courseID')
-        ->where('students.id', '=', $id)
-        ->get();
+            ->join('students', 'courses.id', '=', 'students.courseID')
+            ->join('subjects', 'courses.id', '=', 'subjects.courseID')
+            ->where('students.id', '=', $id)
+            ->get();
 
         return view('exam_mark/add_exam_mark', ['students' => $student], ['subjects' => $subject]);
     }
 
     // create exam mark
-    public function createExamMark(Request $request) {
+    public function createExamMark(Request $request)
+    {
         $request->validate([
             'subject' => ['required'],
             'exam_mark' => ['required', 'max:6']
@@ -38,6 +41,7 @@ class ExamMarkController extends Controller
         ]);
 
         $examMark = new ExamMark;
+        $examMark->id = Str::random(20);
         $examMark->studentID = $request->student;
         $examMark->courseID = $request->course;
         $examMark->subjectID = $request->subject;
@@ -96,33 +100,36 @@ class ExamMarkController extends Controller
     }
 
     // read exam mark
-    public function readExamMark() {
+    public function readExamMark()
+    {
         $examMark = DB::table('exam_marks')
-        ->join('students', 'exam_marks.studentID', '=', 'students.id')
-        ->join('courses', 'exam_marks.courseID', '=', 'courses.id')
-        ->join('subjects', 'exam_marks.subjectID', '=', 'subjects.id')
-        ->select('exam_marks.*', 'students.name', 'courses.courseName', 'subjects.subjectName')
-        ->orderBy('exam_marks.id', 'asc')
-        ->paginate(50);
+            ->join('students', 'exam_marks.studentID', '=', 'students.id')
+            ->join('courses', 'exam_marks.courseID', '=', 'courses.id')
+            ->join('subjects', 'exam_marks.subjectID', '=', 'subjects.id')
+            ->select('exam_marks.*', 'students.name', 'courses.courseName', 'subjects.subjectName')
+            ->orderBy('exam_marks.id', 'asc')
+            ->paginate(50);
 
         return view('exam_mark/exam_mark', ['examMarks' => $examMark]);
     }
 
     // get specific exam mark data
-    public function getExamMark($id) {
+    public function getExamMark($id)
+    {
         $examMark = DB::table('exam_marks')
-        ->join('students', 'exam_marks.studentID', '=', 'students.id')
-        ->join('courses', 'exam_marks.courseID', '=', 'courses.id')
-        ->join('subjects', 'exam_marks.subjectID', '=', 'subjects.id')
-        ->select('exam_marks.*', 'students.name', 'courses.courseName', 'subjects.subjectName')
-        ->where('exam_marks.id', '=', $id)
-        ->get();
+            ->join('students', 'exam_marks.studentID', '=', 'students.id')
+            ->join('courses', 'exam_marks.courseID', '=', 'courses.id')
+            ->join('subjects', 'exam_marks.subjectID', '=', 'subjects.id')
+            ->select('exam_marks.*', 'students.name', 'courses.courseName', 'subjects.subjectName')
+            ->where('exam_marks.id', '=', $id)
+            ->get();
 
         return view('exam_mark/edit_exam_mark', ['examMarks' => $examMark]);
     }
 
     // update exam mark
-    public function updateExamMark(Request $request) {
+    public function updateExamMark(Request $request)
+    {
         $request->validate([
             'exam_mark' => ['required', 'max:6']
         ], [
@@ -134,6 +141,7 @@ class ExamMarkController extends Controller
         $examMark->courseID = $request->course;
         $examMark->subjectID = $request->subject;
         $examMark->examMark = $request->exam_mark;
+        $examMark->updated_at = now();
 
         if ($request->exam_mark >= 80.00 && $request->exam_mark <= 100.00) {
             $examMark->grade = "A+ (Distinction)";
@@ -188,19 +196,22 @@ class ExamMarkController extends Controller
     }
 
     // delete exam mark
-    public function deleteExamMark($id) {
+    public function deleteExamMark($id)
+    {
         $examMark = ExamMark::find($id);
         $examMark->delete();
         return redirect('exammark');
     }
-    
+
     // export student exam mark report
-    public function exportStudentExamMarkReport() {
+    public function exportStudentExamMarkReport()
+    {
         return Excel::download(new StudentExamMarkReportExport, 'Student Exam Mark Report.csv');
     }
 
     // export subject exam mark report
-    public function exportSubjectExamMarkReport() {
+    public function exportSubjectExamMarkReport()
+    {
         return Excel::download(new SubjectExamMarkReportExport, 'Subject Exam Mark Report.csv');
     }
 }

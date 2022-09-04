@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Student;
 use App\Models\Course;
@@ -12,13 +13,15 @@ use Excel;
 class StudentController extends Controller
 {
     // get course data
-    public function getCourse() {
+    public function getCourse()
+    {
         $course = Course::all();
         return view('student/add_student', ['courses' => $course]);
     }
 
     // create student
-    public function createStudent(Request $request) {
+    public function createStudent(Request $request)
+    {
         $request->validate([
             'name' => ['required', 'max:100'],
             'dob' => ['required'],
@@ -40,6 +43,7 @@ class StudentController extends Controller
         ]);
 
         $student = new Student;
+        $student->id = Str::random(20);
         $student->name = $request->name;
         $student->dob = $request->dob;
         $student->gender = $request->gender;
@@ -53,30 +57,33 @@ class StudentController extends Controller
     }
 
     // read student
-    public function readStudent() {
+    public function readStudent()
+    {
         $student = DB::table('courses')
-        ->join('students', 'courses.id', '=', 'students.courseID')
-        ->select('students.*', 'courses.courseName')
-        ->orderBy('students.id', 'asc')
-        ->paginate(50);
+            ->join('students', 'courses.id', '=', 'students.courseID')
+            ->select('students.*', 'courses.courseName')
+            ->orderBy('students.id', 'asc')
+            ->paginate(50);
 
         return view('student/student', ['students' => $student]);
     }
 
     // get specific student data
-    public function getStudent($id) {
+    public function getStudent($id)
+    {
         $course = Course::all();
 
         $student = DB::table('courses')
-        ->join('students', 'courses.id', '=', 'students.courseID')
-        ->where('students.id', '=', $id)
-        ->get();
+            ->join('students', 'courses.id', '=', 'students.courseID')
+            ->where('students.id', '=', $id)
+            ->get();
 
         return view('student/edit_student', ['courses' => $course], ['students' => $student]);
     }
-    
+
     // update student
-    public function updateStudent(Request $request) {
+    public function updateStudent(Request $request)
+    {
         $request->validate([
             'name' => ['required', 'max:100'],
             'dob' => ['required'],
@@ -106,19 +113,22 @@ class StudentController extends Controller
         $student->address = $request->address;
         $student->courseID = $request->course;
         $student->dateEnrollment = $request->date_enrollment;
+        $student->updated_at = now();
         $student->save();
         return redirect('student');
     }
 
     // delete student
-    public function deleteStudent($id) {
+    public function deleteStudent($id)
+    {
         $student = Student::find($id);
         $student->delete();
         return redirect('student');
     }
 
     // export student list
-    public function exportStudentList() {
+    public function exportStudentList()
+    {
         return Excel::download(new StudentListExport, 'Student List.csv');
     }
 }
