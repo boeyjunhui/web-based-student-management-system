@@ -14,13 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('exam_marks', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('studentID');
-            $table->unsignedBigInteger('courseID');
-            $table->unsignedBigInteger('subjectID');
+            $table->string('id');
+            $table->string('studentID');
+            $table->string('courseID');
+            $table->string('subjectID');
             $table->double('examMark');
             $table->string('grade');
             $table->double('gpa');
+            $table->timestamps();
 
             $table->foreign('studentID')->references('id')->on('students')->onDelete('cascade');;
             $table->foreign('courseID')->references('id')->on('courses')->onDelete('cascade');;
