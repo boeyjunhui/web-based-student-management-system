@@ -24,7 +24,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>No</th>
                                 <th>Course Name</th>
                                 <th>Course Code</th>
                                 <th>Faculty</th>
@@ -34,9 +34,11 @@
                             </tr>
                         </thead>
                         <tbody id="table-data">
-                            @foreach ($courses as $course)
+                            @php $no = 1; @endphp
+
+                            @forelse ($courses as $course)
                                 <tr>
-                                    <td>{{ $course->id }}</td>
+                                    <td>{{ $no }}</td>
                                     <td>{{ $course->courseName }}</td>
                                     <td>{{ $course->courseCode }}</td>
                                     <td>{{ $course->faculty }}</td>
@@ -45,7 +47,13 @@
                                     <td><a class="btn btn-secondary secondary-btn" href={{ "course/edit/".$course->id }}><i class="far fa-edit"></i></a></td>
                                     <td><button class="btn btn-danger danger-btn delete-course" value="{{ $course->id }}"><i class="far fa-trash-alt"></i></button></td>
                                 </tr>
-                            @endforeach
+
+                                @php $no++; @endphp
+                            @empty
+                                <tr>
+                                    <td colspan="8">No Data Found</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
