@@ -22,7 +22,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// student crud
+// student
 Route::controller(StudentController::class)->group(function () {
     Route::get('student', 'readStudent');
     Route::view('student/add', 'student/add_student');
@@ -34,7 +34,7 @@ Route::controller(StudentController::class)->group(function () {
     Route::get('student/student-list', 'exportStudentList');
 });
 
-// course crud
+// course
 Route::controller(CourseController::class)->group(function () {
     Route::get('course', 'readCourse');
     Route::view('course/add', 'course/add_course');
@@ -45,7 +45,7 @@ Route::controller(CourseController::class)->group(function () {
     Route::get('course/course-list', 'exportCourseList');
 });
 
-// subject crud
+// subject
 Route::controller(SubjectController::class)->group(function () {
     Route::get('subject', 'readSubject');
     Route::view('subject/add', 'subject/add_subject');
@@ -57,7 +57,7 @@ Route::controller(SubjectController::class)->group(function () {
     Route::get('subject/subject-list', 'exportSubjectList');
 });
 
-// exam mark crud
+// exam mark
 Route::controller(ExamMarkController::class)->group(function () {
     Route::get('exammark', 'readExamMark');
     Route::get('exammark/add/{id}', 'getData');
