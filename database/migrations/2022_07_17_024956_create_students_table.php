@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('dateEnrollment');
             $table->timestamps();
 
-            $table->foreign('courseID')->references('id')->on('courses')->onDelete('cascade');;
+            // $table->foreign('courseID')->references('id')->on('courses')->onDelete('cascade');;
         });
     }
 

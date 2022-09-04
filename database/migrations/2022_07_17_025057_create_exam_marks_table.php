@@ -23,9 +23,9 @@ return new class extends Migration
             $table->double('gpa');
             $table->timestamps();
 
-            $table->foreign('studentID')->references('id')->on('students')->onDelete('cascade');;
-            $table->foreign('courseID')->references('id')->on('courses')->onDelete('cascade');;
-            $table->foreign('subjectID')->references('id')->on('subjects')->onDelete('cascade');;
+            // $table->foreign('studentID')->references('id')->on('students')->onDelete('cascade');;
+            // $table->foreign('courseID')->references('id')->on('courses')->onDelete('cascade');;
+            // $table->foreign('subjectID')->references('id')->on('subjects')->onDelete('cascade');;
         });
     }
 
